@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ 'Register' if mode == 'register' else 'Login' }} - CampusConnect</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-box">
+    <div class="auth-head">
+      <div class="logo">CC</div>
+      <h1>CampusConnect</h1>
+      <p>Smart Student Life Assistant</p>
+    </div>
+    <div class="auth-form">
+      <h3>{{ 'Student Registration' if mode == 'register' else 'Student Login' }}</h3>
+      {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+      <form method="post" action="/{{ mode }}">
+        {% if mode == 'register' %}
+          <label>Full Name</label><input type="text" name="name" required>
+        {% endif %}
+        <label>Email</label><input type="email" name="email" required>
+        <label>Password</label><input type="password" name="password" required minlength="6">
+        {% if mode == 'register' %}
+          <label>Branch</label>
+          <select name="branch"><option>Computer Science</option><option>Information Technology</option>
+            <option>Electronics</option><option>Mechanical</option><option>Civil</option></select>
+          <label>Year</label>
+          <select name="year"><option>1st Year</option><option selected>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+        {% endif %}
+        <button class="btn btn-primary btn-block" type="submit">{{ 'Register' if mode == 'register' else 'Login' }}</button>
+      </form>
+      <p class="auth-link">
+        {% if mode == 'login' %}New student? <a href="/register">Register here</a>
+        {% else %}Already registered? <a href="/login">Login here</a>{% endif %}
+      </p>
+    </div>
+  </div>
+</body>
+</html>

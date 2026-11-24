@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="welcome">
+  <h3>Welcome to CampusConnect</h3>
+  <p>Manage your academic activities in one place.</p>
+</div>
+
+<div class="grid-4">
+  <div class="stat"><div class="stat-num">{{ pending }}</div><div>Pending Assignments</div></div>
+  <div class="stat {{ 'stat-warn' if percent < 75 else 'stat-ok' }}"><div class="stat-num">{{ percent }}%</div><div>Attendance Percentage</div></div>
+  <div class="stat"><div class="stat-num">{{ todays|length }}</div><div>Upcoming Classes (Today)</div></div>
+  <div class="stat"><div class="stat-num">{{ events|length }}</div><div>Upcoming Events</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-head">Today's Class Schedule</div>
+    <table><tr><th>Time</th><th>Subject</th><th>Room</th></tr>
+      {% for c in todays %}<tr><td>{{ c.start_time }}</td><td>{{ c.subject }}</td><td>{{ c.room }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">No classes today. <a href="/timetable">Add timetable</a></td></tr>{% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-head">Recent College Notices</div>
+    <ul class="list">
+      {% for n in notices %}<li><b>{{ n.title }}</b><br><small>{{ n.posted_on }} | {{ n.category }}</small></li>{% endfor %}
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-head">Upcoming Assignment Deadlines</div>
+    <table><tr><th>Title</th><th>Subject</th><th>Due</th></tr>
+      {% for a in deadlines %}<tr><td>{{ a.title }}</td><td>{{ a.subject }}</td>
+        <td class="{{ 'text-red' if a.due_date < today }}">{{ a.due_date }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">No pending assignments.</td></tr>{% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-head">Weekly Study Plan</div>
+    <table><tr><th>Day</th><th>Topic</th><th>Hours</th></tr>
+      {% for p in plan %}<tr><td>{{ p.day }}</td><td>{{ p.topic }}</td><td>{{ p.hours }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">No study plan yet. <a href="/planner">Create one</a></td></tr>{% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

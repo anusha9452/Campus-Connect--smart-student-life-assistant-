@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="card-head">Add Subject</div>
+  <form method="post" action="/attendance/add" class="inline-form">
+    <input type="text" name="subject" placeholder="Subject name" required>
+    <button class="btn btn-primary">Add Subject</button>
+  </form>
+</div>
+<div class="card">
+  <div class="card-head">Subject-wise Attendance (minimum required: 75%)</div>
+  <div class="table-wrap"><table>
+    <tr><th>Subject</th><th>Attended</th><th>Total</th><th>Percentage</th><th>Status</th><th>Mark Today</th><th></th></tr>
+    {% for a in rows %}
+    {% set p = (a.attended * 100 / a.total)|round|int if a.total else 0 %}
+    <tr>
+      <td>{{ a.subject }}</td><td>{{ a.attended }}</td><td>{{ a.total }}</td><td>{{ p }}%</td>
+      <td><span class="badge {{ 'b-ok' if p >= 75 else 'b-err' }}">{{ 'Safe' if p >= 75 else 'Shortage' }}</span></td>
+      <td class="actions">
+        <form method="post" action="/attendance/{{ a.id }}/present"><button class="btn btn-success btn-sm">Present</button></form>
+        <form method="post" action="/attendance/{{ a.id }}/absent"><button class="btn btn-secondary btn-sm">Absent</button></form>
+      </td>
+      <td><form method="post" action="/delete/attendance/{{ a.id }}" class="confirm"><button class="btn btn-danger btn-sm">Delete</button></form></td>
+    </tr>
+    {% else %}<tr><td colspan="7" class="empty">No subjects added yet.</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endblock %}

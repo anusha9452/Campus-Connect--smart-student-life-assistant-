@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="card-head">Add New Assignment</div>
+  <form method="post" action="/assignments/add" class="inline-form">
+    <input type="text" name="title" placeholder="Assignment title" required>
+    <input type="text" name="subject" placeholder="Subject" required>
+    <input type="date" name="due_date" required>
+    <button class="btn btn-primary">Add</button>
+  </form>
+</div>
+<div class="card">
+  <div class="card-head">Assignment List</div>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Title</th><th>Subject</th><th>Due Date</th><th>Status</th><th>Action</th></tr>
+    {% for a in rows %}
+    <tr>
+      <td>{{ loop.index }}</td><td>{{ a.title }}</td><td>{{ a.subject }}</td>
+      <td class="{{ 'text-red' if a.status == 'Pending' and a.due_date < today }}">{{ a.due_date }}</td>
+      <td><span class="badge {{ 'b-ok' if a.status == 'Completed' else 'b-warn' }}">{{ a.status }}</span></td>
+      <td class="actions">
+        <form method="post" action="/assignments/{{ a.id }}/toggle"><button class="btn btn-secondary btn-sm">{{ 'Reopen' if a.status == 'Completed' else 'Mark Done' }}</button></form>
+        <form method="post" action="/delete/assignments/{{ a.id }}" class="confirm"><button class="btn btn-danger btn-sm">Delete</button></form>
+      </td>
+    </tr>
+    {% else %}<tr><td colspan="6" class="empty">No assignments added yet.</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endblock %}

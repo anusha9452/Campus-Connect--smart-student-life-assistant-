@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="card-head">Add Class</div>
+  <form method="post" action="/timetable/add" class="inline-form">
+    <select name="day">{% for d in days %}<option>{{ d }}</option>{% endfor %}</select>
+    <input type="time" name="start_time" required>
+    <input type="text" name="subject" placeholder="Subject" required>
+    <input type="text" name="room" placeholder="Room">
+    <input type="text" name="faculty" placeholder="Faculty">
+    <button class="btn btn-primary">Add</button>
+  </form>
+</div>
+<div class="card">
+  <div class="card-head">Weekly Timetable</div>
+  <div class="table-wrap"><table>
+    <tr><th>Day</th><th>Time</th><th>Subject</th><th>Room</th><th>Faculty</th><th>Action</th></tr>
+    {% for c in rows %}
+    <tr><td>{{ c.day }}</td><td>{{ c.start_time }}</td><td>{{ c.subject }}</td><td>{{ c.room }}</td><td>{{ c.faculty }}</td>
+      <td><form method="post" action="/delete/timetable/{{ c.id }}" class="confirm"><button class="btn btn-danger btn-sm">Delete</button></form></td></tr>
+    {% else %}<tr><td colspan="6" class="empty">Timetable is empty.</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endblock %}
